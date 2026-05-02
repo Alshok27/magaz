@@ -1,22 +1,25 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Добавляем сервисы в контейнер
+// Добавляем сервисы
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Настройка HTTP pipeline
+// Включаем Swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "GearZone API");
+        options.RoutePrefix = string.Empty;   // Это сделает Swagger главной страницей
+    });
 }
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
