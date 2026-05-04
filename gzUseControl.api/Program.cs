@@ -1,20 +1,31 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Добавляем сервисы
+// Добавляем базовые сервисы
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// === AutoMapper ===
+builder.Services.AddAutoMapper(typeof(gearzone.businesslogic.Mappings.MappingProfile));
+
+// === Репозитории ===
+builder.Services.AddScoped<gearzone.dataaccess.Repositories.IProductRepository,
+                           gearzone.dataaccess.Repositories.ProductRepository>();
+
+// === Сервисы ===
+builder.Services.AddScoped<gearzone.businesslogic.Services.IProductService,
+                           gearzone.businesslogic.Services.ProductService>();
+
 var app = builder.Build();
 
-// Включаем Swagger
+// Настройка Swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "GearZone API");
-        options.RoutePrefix = string.Empty;   // Это сделает Swagger главной страницей
+        options.RoutePrefix = string.Empty;   // Swagger будет главной страницей
     });
 }
 
