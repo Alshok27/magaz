@@ -1,48 +1,48 @@
-﻿using gearzone.dataaccess.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using gearzone.dataaccess.Data;
 using gearzone.domains.Entities;
+using gearzone.dataaccess.Repositories;
 
 namespace gearzone.dataaccess.Repositories;
 
 public class ProductRepository : IProductRepository
 {
-    private readonly List<Product> _products = new();
+    private readonly ApplicationDbContext _context;
 
-    public Task<IEnumerable<Product>> GetAllAsync()
+    public ProductRepository(ApplicationDbContext context)
     {
-        return Task.FromResult<IEnumerable<Product>>(_products);
+        _context = context;
     }
 
-    public Task<Product?> GetByIdAsync(int id)
+    public async Task<IEnumerable<Product>> GetAllAsync()
     {
-        var product = _products.FirstOrDefault(p => p.Id == id);
-        return Task.FromResult(product);
+        return await _context.Products.ToListAsync();
     }
 
-    public Task AddAsync(Product product)
+    public async Task<Product?> GetByIdAsync(int id)
     {
-        product.Id = _products.Count + 1;
-        _products.Add(product);
-        return Task.CompletedTask;
+        return await _context.Products.FindAsync(id);
     }
 
-    public Task UpdateAsync(Product product)
+    public async Task AddAsync(Product product)
     {
-        var existing = _products.FirstOrDefault(p => p.Id == product.Id);
-        if (existing != null)
-        {
-            _products.Remove(existing);
-            _products.Add(product);
-        }
-        return Task.CompletedTask;
+        await _context.Products.AddAsync(product);
+        await _context.SaveChangesAsync();
     }
 
-    public Task DeleteAsync(int id)
+    public async Task UpdateAsync(Product product)
     {
-        var product = _products.FirstOrDefault(p => p.Id == id);
+        _context.Products.Update(product);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var product = await _context.Products.FindAsync(id);
         if (product != null)
         {
-            _products.Remove(product);
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
         }
-        return Task.CompletedTask;
     }
 }
