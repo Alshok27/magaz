@@ -8,7 +8,6 @@ namespace gzUseControl.Api.Controller
     [ApiController]
     public class UserController : ControllerBase
     {
-        // In-memory storage for users (for demonstration purposes)
         private static List<User> _users = new();
         private static int _nextId = 1;
 

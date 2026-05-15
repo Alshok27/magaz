@@ -17,7 +17,6 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Убираем предупреждения о decimal
         modelBuilder.Entity<Product>()
             .Property(p => p.Price)
             .HasPrecision(18, 2);
@@ -25,5 +24,10 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Product>()
             .Property(p => p.OldPrice)
             .HasPrecision(18, 2);
+
+        modelBuilder.Entity<Product>().HasData(
+            new Product { Id = 1, Name = "Razer Viper V3 Pro", Brand = "Razer", Price = 15990, OldPrice = 17990, Category = "Мыши", ImageUrl = "https://example.com/razer-viper.jpg", Rating = 5, Reviews = 124, Badge = "Bestseller", InStock = true, Description = "Флагманская игровая мышь Razer Viper V3 Pro." },
+            new Product { Id = 2, Name = "Logitech G Pro X Superlight", Brand = "Logitech", Price = 12990, OldPrice = null, Category = "Мыши", ImageUrl = "https://example.com/logitech-gpro.jpg", Rating = 5, Reviews = 89, Badge = null, InStock = true, Description = "Лёгкая игровая мышь Logitech G Pro X Superlight." }
+        );
     }
 }
