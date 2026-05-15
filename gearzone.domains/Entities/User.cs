@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 using System.ComponentModel.DataAnnotations;
 
 namespace gearzone.domains.Entities;
@@ -23,14 +22,3 @@ public class User
 
     public UserRole Role { get; set; } = UserRole.User;
 }
-=======
-﻿namespace gearzone.domains.Entities;
-
-public class User
-{
-    public int Id { get; set; }
-    public string Username { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-}
->>>>>>> 8db369f88395dac94fe0ae6c4a5a67b25aebcbc6

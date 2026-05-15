@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 using gearzone.businesslogic.Structure;
 using gearzone.dataaccess.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -79,48 +78,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-=======
-using Microsoft.EntityFrameworkCore;
-using gearzone.dataaccess.Data;
-
-var builder = WebApplication.CreateBuilder(args);
-
-// Добавляем базовые сервисы
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// === AutoMapper ===
-builder.Services.AddAutoMapper(cfg =>
-    cfg.AddProfile<gearzone.businesslogic.Mappings.MappingProfile>());
-
-// === Репозитории ===
-builder.Services.AddScoped<gearzone.dataaccess.Repositories.IProductRepository,
-                           gearzone.dataaccess.Repositories.ProductRepository>();
-
-// === Сервисы ===
-builder.Services.AddScoped<gearzone.businesslogic.Services.IProductService,
-                           gearzone.businesslogic.Services.ProductService>();
-
-// === DbContext (EF Core) ===
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-var app = builder.Build();
-
-// Настройка Swagger
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "GearZone API");
-        options.RoutePrefix = string.Empty; // Swagger будет главной страницей
-    });
-}
-
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
-app.Run();
->>>>>>> 8db369f88395dac94fe0ae6c4a5a67b25aebcbc6
